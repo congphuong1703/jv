@@ -1,0 +1,53 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v4.0.1">
+    <title>Floating labels example · Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link type="text/css" rel="stylesheet" th:href="@{css/bootstrap.min.css}" href="/css/bootstrap.min.css"/>
+    <!-- Custom styles for this template -->
+    <link type="text/css" rel="stylesheet" th:href="@{css/mystyle.css}" href="/css/mystyle.css"/>
+</head>
+<body>
+<form class="form-signin" th:action="@{/login}" method="post">
+    <div class="alert alert-danger" th:if="${param.error}">
+        Invalid username and password.
+    </div>
+    <div class="alert alert-warning" th:if="${param.logout}">
+        You have been logged out.
+    </div>
+    <div class="text-center mb-4">
+        <img class="mb-4" src="../assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+        <h1 class="h3 mb-3 font-weight-normal">Floating labels</h1>
+        <p>Build form controls with floating labels via the <code>:placeholder-shown</code> pseudo-element. <a
+                href="https://caniuse.com/#feat=css-placeholder-shown">Works in latest Chrome, Safari, and Firefox.</a>
+        </p>
+    </div>
+
+    <div class="form-label-group">
+        <input id="inputEmail" class="form-control" name="username" placeholder="Email address" required autofocus>
+        <label for="inputEmail">Email address</label>
+    </div>
+
+    <div class="form-label-group">
+        <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
+        <label for="inputPassword">Password</label>
+    </div>
+
+    <div class="checkbox mb-3">
+        <label>
+            <input type="checkbox" value="remember-me">&nbsp;<span th:utext="#{remember}"></span>
+        </label>
+    </div>
+    <a href="?lang=en">English</a> | <a href="?lang=vi">VN</a>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+    <a th:href="@{/register}">Sign-up</a>
+    <p class="mt-5 mb-3 text-muted text-center">&copy; 2017-2020</p>
+</form>
+</body>
+</html>
