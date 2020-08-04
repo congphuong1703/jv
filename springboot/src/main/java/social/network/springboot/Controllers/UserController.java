@@ -3,6 +3,7 @@ package social.network.springboot.Controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,9 +11,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import social.network.springboot.DTO.UserDTO;
+import social.network.springboot.DTO.UserPasswordDTO;
 import social.network.springboot.Entities.Users;
 import social.network.springboot.Entities.VerificationToken;
 import social.network.springboot.Enums.EnumStatus;
+import social.network.springboot.Listener.OnForgotPasswordSuccessEvent;
 import social.network.springboot.Listener.OnRegistrationSuccessEvent;
 import social.network.springboot.Services.UserService;
 import social.network.springboot.Services.VerificationTokenService;
@@ -53,8 +56,28 @@ public class UserController {
 		return "userProfile";
 	}
 
+	@RequestMapping(value = "/forgot_password",method = RequestMethod.POST)
+	public String forgotPassword( @ModelAttribute("userObj") Users userObj,Model model,WebRequest request){
+		Users user = userService.findByEmail(userObj.getEmail());
+		Locale locale = request.getLocale();
+		String mesEmailNotExists = messages.getMessage("email.notExists", null, locale);
+		if(user == null)
+		{
+			model.addAttribute("error",mesEmailNotExists);
+			logger.info("Forgot password not find email: " + userObj.getEmail());
+			return "forgot_password";
+		}
+		try {
+			String appUrl = request.getContextPath();
+			eventPublisher.publishEvent(new OnForgotPasswordSuccessEvent(user, request.getLocale(), appUrl));
+		} catch (Exception re) {
+			logger.info(re.getMessage());//error while sending confirmation email
+		}
+		logger.info("Send email forgot password success " + user.getUsername());
+		return "redirect:/login";
+	}
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public String save(@Valid @ModelAttribute("usersObj") UserDTO userObj, BindingResult bindingResult, WebRequest request) {
+	public String save(@Valid @ModelAttribute("userObj") UserDTO userObj, BindingResult bindingResult, WebRequest request) {
 		Users users = userService.findByUsername(userObj.getUserName());
 		Locale locale = request.getLocale();
 		String mesUserExists = messages.getMessage("user.exists", null, locale);
@@ -78,9 +101,8 @@ public class UserController {
 		users = userService.registerUser(userObj);
 		try {
 			String appUrl = request.getContextPath();
-			eventPublisher.publishEvent(new OnRegistrationSuccessEvent(users, request.getLocale(),appUrl));
-		}catch(Exception re) {
-			userService.deleteByUsername(users.getUsername());
+			eventPublisher.publishEvent(new OnRegistrationSuccessEvent(users, request.getLocale(), appUrl));
+		} catch (Exception re) {
 			logger.info(re.getMessage());
 //			throw new Exception("Error while sending confirmation email");
 		}
@@ -88,23 +110,47 @@ public class UserController {
 		return "redirect:/login";
 	}
 
-	@RequestMapping(value = "/confirmRegistration")
+	@RequestMapping(value = "/confirm_registration")
 	public String confirmRegistration(WebRequest request, Model model, @RequestParam("token") String token) {
-		Locale locale = request.getLocale();
 		VerificationToken verificationToken = verificationTokenService.findByToken(token);
-		if (verificationToken == null){
+		Locale locale = request.getLocale();
+
+		boolean checkConfirm = userService.confirmEmail(verificationToken);
+
+		if (!checkConfirm) {
 			String message = messages.getMessage("auth.invalidToken", null, locale);
 			model.addAttribute("message", message);
-			return "redirect:access-denied";
+			return "access_denied";
 		}
 		Users users = verificationToken.getUser();
-		Calendar calendar = Calendar.getInstance();
-		if((verificationToken.getExpiryDate().getTime() - calendar.getTime().getTime()) <= 0){
-			String message = messages.getMessage("auth.expired", null, locale);
-			model.addAttribute("message", message);
-			return "redirect:access-denied";
-		}
 		users.setStatus(EnumStatus.ACTIVE);
-		return null;
+		return "redirect:/login";
+
+	}
+
+	@RequestMapping(value = "/reset_password")
+	public String confirmForgotPassword(WebRequest request, Model model, @RequestParam("token") String token) {
+		VerificationToken verificationToken = verificationTokenService.findByToken(token);
+		boolean checkConfirm = userService.confirmEmail(verificationToken);
+		Users users = verificationToken.getUser();
+		UserPasswordDTO userDTO = new UserPasswordDTO();
+		userDTO.setId(users.getId());
+		Locale locale = request.getLocale();
+
+		if (!checkConfirm) {
+			String message = messages.getMessage("auth.invalidToken", null, locale);
+			model.addAttribute("message", message);
+			return "access_denied";
+		}
+		model.addAttribute("userObj",userDTO);
+		return "reset_password";
+	}
+
+	@RequestMapping(value = "/reset_password",method = RequestMethod.POST)
+	public String updatePassword(@Valid @ModelAttribute("userObj") UserPasswordDTO userObj,BindingResult bindingResult, Model model, WebRequest request){
+		String resetSuccess = messages.getMessage("resetPasswordSuccess",null,request.getLocale());
+		userService.updatePassword(userObj);
+		model.addAttribute("resetSuccess",resetSuccess);
+		return "reset_password";
 	}
 }

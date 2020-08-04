@@ -13,10 +13,11 @@ public class Users {
 	public Users() {
 	}
 
-	public Users(String username, String password, String role) {
+	public Users(String username, String password, String email,String role) {
 		super();
 		this.username = username;
 		this.password = password;
+		this.email = email;
 		this.role = role;
 	}
 

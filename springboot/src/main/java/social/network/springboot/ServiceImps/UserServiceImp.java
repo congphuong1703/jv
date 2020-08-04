@@ -5,15 +5,21 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+import org.springframework.web.context.request.WebRequest;
 import social.network.springboot.DTO.UserDTO;
+import social.network.springboot.DTO.UserPasswordDTO;
 import social.network.springboot.Entities.Users;
+import social.network.springboot.Entities.VerificationToken;
 import social.network.springboot.Enums.EnumStatus;
 import social.network.springboot.Repositories.UserRepository;
 import social.network.springboot.Services.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.transaction.Transactional;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class UserServiceImp implements UserService, UserDetailsService {
@@ -38,13 +44,13 @@ public class UserServiceImp implements UserService, UserDetailsService {
 	@Transactional
 	public Users registerUser(UserDTO userDto) {
 		Users user = new Users();
+		String hashedPassword = passwordEncoder.encode(userDto.getPassword());
+
 		user.setFirstName(userDto.getFirstName());
 		user.setLastName(userDto.getLastName());
 		user.setFullName(userDto.getFirstName() + " " + userDto.getLastName());
 		user.setUsername(userDto.getUserName());
-		String hashedPassword = passwordEncoder.encode(userDto.getPassword());
 		user.setPassword(hashedPassword);
-		user.setStatus(EnumStatus.ACTIVE);
 		user.setEmail(userDto.getEmail());
 		user.setRole("USER");
 		userRepository.save(user);
@@ -97,7 +103,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		// Kiểm tra xem user có tồn tại trong database không?
 		Users users = this.findByUsername(username);
-		if (users == null) {
+		if (users == null || users.getStatus() == EnumStatus.INACTIVE) {
 			throw new UsernameNotFoundException("Invalid username or password.");
 		}
 		try {
@@ -115,5 +121,24 @@ public class UserServiceImp implements UserService, UserDetailsService {
 			   true, true, true, AuthorityUtils.createAuthorityList(users.getRole()));
 		System.out.println("ROLE: " + users.getRole());
 		return user;
+	}
+
+	@Override
+	public boolean confirmEmail(VerificationToken verificationToken) {
+		Calendar calendar = Calendar.getInstance();
+		if (verificationToken == null) {
+			return false;
+		}
+		if ((verificationToken.getExpiryDate().getTime() - calendar.getTime().getTime()) <= 0) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public void updatePassword(UserPasswordDTO userPasswordDTO){
+		Users users = this.getUserById(userPasswordDTO.getId());
+		users.setPassword(passwordEncoder.encode(userPasswordDTO.getPassword()));
+		this.saveUser(users);
 	}
 }

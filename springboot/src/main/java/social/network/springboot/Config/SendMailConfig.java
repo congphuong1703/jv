@@ -2,10 +2,8 @@ package social.network.springboot.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean;
 
 import java.util.Properties;
 
@@ -33,5 +31,4 @@ public class SendMailConfig {
 		javaMailSender.setJavaMailProperties(mailProperties);
 		return javaMailSender;
 	}
-
 }
