@@ -1,15 +1,25 @@
 package social.network.springboot.Controllers;
 
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import social.network.springboot.Entities.Users;
+import sun.plugin.liveconnect.SecurityContextHelper;
 
 @Controller
 public class HomeController {
 
 	@RequestMapping(value = "/login")
-	public String login(Model model){
+	public String login(Model model) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+			return "redirect:/home";
+		}
 		return "login";
 	}
 
@@ -22,6 +32,11 @@ public class HomeController {
 	public String forgotPassword(Model model){
 		model.addAttribute("userObj",new Users());
 		return "forgot_password";
+	}
+
+	@RequestMapping(value = "/access-denied")
+	public String accessDenied(Model model){
+		return "access_denied";
 	}
 
 	@RequestMapping(value = "/admin")

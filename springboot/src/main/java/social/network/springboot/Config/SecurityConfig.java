@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -43,22 +44,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(final HttpSecurity http) throws Exception {
 		http
 			   .authorizeRequests()
-			   .antMatchers("/home", "/", "/resources/**", "/css/**", "/register", "/confirm_registration","/forgot_password","/reset_password").permitAll()// Cho phép tất cả mọi người truy cập vào  địa chỉ này
+			   .antMatchers("/home", "/", "/register", "/confirm_registration","/forgot_password","/reset_password").permitAll()// Cho phép tất cả mọi người truy cập vào  địa chỉ này
 			   .antMatchers("/admin/**").hasRole("ADMIN")
 			   .and()
 			   .authorizeRequests()
 			   .anyRequest().authenticated()
 			   .and()
-			   .formLogin() // Cho phép người dùng xác thực bằng form login
+			   .formLogin() // allow user authentication with login page
 			   .loginPage("/login")
-			   .successForwardUrl("/home")
-			   .permitAll() // Tất cả đều được truy cập vào địa chỉ này
+			   .defaultSuccessUrl("/home")
+			   .permitAll()
+//			   .successForwardUrl("/home")
 			   .and()
-			   .rememberMe()
+			   .rememberMe().key("jremember")
 			   .and()
-			   .logout() // Cho phép logout
+			   .logout() // allow logout
 			   .permitAll()
 			   .and()
 			   .exceptionHandling().accessDeniedPage("/access-denied");
+	}
+
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+		web
+			   .ignoring()
+			   .antMatchers("/resources/**", "/static/**","/webfonts/**", "/css/**", "/js/**", "/images/**","/template/**");
 	}
 }

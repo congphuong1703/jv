@@ -46,9 +46,11 @@ public class UserServiceImp implements UserService, UserDetailsService {
 		Users user = new Users();
 		String hashedPassword = passwordEncoder.encode(userDto.getPassword());
 
-		user.setFirstName(userDto.getFirstName());
-		user.setLastName(userDto.getLastName());
-		user.setFullName(userDto.getFirstName() + " " + userDto.getLastName());
+//		String fullName = userDto.getFullName();
+
+//		user.setFirstName(fullName.substring(0,fullName.indexOf(" ")));
+//		user.setLastName(fullName.substring(fullName.indexOf(" ") + 1, fullName.length()));
+		user.setFullName(userDto.getFullName());
 		user.setUsername(userDto.getUserName());
 		user.setPassword(hashedPassword);
 		user.setEmail(userDto.getEmail());

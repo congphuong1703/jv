@@ -24,20 +24,12 @@ public class UserDTO {
 
 	@NotNull(message = "is required")
 	@Size(min = 1, message = "is required")
-	private String firstName;
-
-	@NotNull(message = "is required")
-	@Size(min = 1, message = "is required")
-	private String lastName;
+	private String fullName;
 
 	@ValidEmail
 	@NotNull(message = "is required")
 	@Size(min = 1, message = "is required")
 	private String email;
-
-//	@NotNull(message = "is required")
-//	@Column(name="enabled")
-//	private boolean enabled;
 
 	public String getUserName() {
 		return userName;
@@ -63,22 +55,6 @@ public class UserDTO {
 		this.matchingPassword = matchingPassword;
 	}
 
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
 	public String getEmail() {
 		return email;
 	}
@@ -87,12 +63,11 @@ public class UserDTO {
 		this.email = username;
 	}
 
-//	public boolean isEnabled() {
-//		return enabled;
-//	}
-//
-//	public void setEnabled(boolean enabled) {
-//		this.enabled = enabled;
-//	}
+	public String getFullName() {
+		return fullName;
+	}
 
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
 }

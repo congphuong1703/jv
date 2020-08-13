@@ -21,7 +21,6 @@ import social.network.springboot.Services.UserService;
 import social.network.springboot.Services.VerificationTokenService;
 
 import javax.validation.Valid;
-import java.util.Calendar;
 import java.util.Locale;
 import java.util.logging.Logger;
 
@@ -57,7 +56,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/forgot_password",method = RequestMethod.POST)
-	public String forgotPassword( @ModelAttribute("userObj") Users userObj,Model model,WebRequest request){
+	public String forgotPassword(@ModelAttribute("userObj") Users userObj,Model model,WebRequest request){
 		Users user = userService.findByEmail(userObj.getEmail());
 		Locale locale = request.getLocale();
 		String mesEmailNotExists = messages.getMessage("email.notExists", null, locale);
@@ -82,20 +81,18 @@ public class UserController {
 		Locale locale = request.getLocale();
 		String mesUserExists = messages.getMessage("user.exists", null, locale);
 		String mesEmailExists = messages.getMessage("email.exists", null, locale);
-//		userValidator.validate(userObj, bindingResult);
 
 		if (users != null) {
 
-			bindingResult.rejectValue("username", "error.userexists", mesUserExists);
+			bindingResult.rejectValue("userName", "error.userexists", mesUserExists);
 			logger.info("There is already an account with this user: " + userObj.getUserName());
 			return "register";
 		} else if (userService.findByUsername(userObj.getUserName()) != null) {
 
-			bindingResult.rejectValue("username", "error.userexists", mesEmailExists);
+			bindingResult.rejectValue("userName", "error.userexists", mesEmailExists);
 			logger.info("There is already an account with this email: " + userObj.getEmail());
 			return "register";
 		}
-
 		if (bindingResult.hasErrors())
 			return "register";
 		users = userService.registerUser(userObj);
@@ -103,8 +100,8 @@ public class UserController {
 			String appUrl = request.getContextPath();
 			eventPublisher.publishEvent(new OnRegistrationSuccessEvent(users, request.getLocale(), appUrl));
 		} catch (Exception re) {
+			//Error while sending confirmation email
 			logger.info(re.getMessage());
-//			throw new Exception("Error while sending confirmation email");
 		}
 		logger.info("Registration success by " + users.getUsername());
 		return "redirect:/login";
