@@ -10,12 +10,14 @@ import java.lang.annotation.Target;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
+import javax.validation.ReportAsSingleViolation;
 
 @Constraint(validatedBy = EmailValidator.class)
 @Target({ ElementType.TYPE, ElementType.FIELD, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface ValidEmail {
+@ReportAsSingleViolation
+public @interface EmailValid {
 	String message() default "Invalid email";
 
 	Class<?>[] groups() default {};

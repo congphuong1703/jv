@@ -3,11 +3,10 @@ package social.network.springboot.Controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
-import org.springframework.data.repository.query.Param;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import social.network.springboot.DTO.UserDTO;
@@ -56,13 +55,11 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/forgot_password",method = RequestMethod.POST)
-	public String forgotPassword(@ModelAttribute("userObj") Users userObj,Model model,WebRequest request){
+	public String forgotPassword(@Valid @ModelAttribute("userObj") Users userObj, BindingResult bindingResult, Model model, WebRequest request){
 		Users user = userService.findByEmail(userObj.getEmail());
-		Locale locale = request.getLocale();
-		String mesEmailNotExists = messages.getMessage("email.notExists", null, locale);
 		if(user == null)
 		{
-			model.addAttribute("error",mesEmailNotExists);
+			bindingResult.rejectValue("email","email.notExists");
 			logger.info("Forgot password not find email: " + userObj.getEmail());
 			return "forgot_password";
 		}
@@ -76,20 +73,15 @@ public class UserController {
 		return "redirect:/login";
 	}
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public String save(@Valid @ModelAttribute("userObj") UserDTO userObj, BindingResult bindingResult, WebRequest request) {
+	public String save(@Validated @ModelAttribute("userObj") UserDTO userObj, BindingResult bindingResult, WebRequest request) {
 		Users users = userService.findByUsername(userObj.getUserName());
-		Locale locale = request.getLocale();
-		String mesUserExists = messages.getMessage("user.exists", null, locale);
-		String mesEmailExists = messages.getMessage("email.exists", null, locale);
 
 		if (users != null) {
-
-			bindingResult.rejectValue("userName", "error.userexists", mesUserExists);
+			bindingResult.rejectValue("userName", "username.exists");
 			logger.info("There is already an account with this user: " + userObj.getUserName());
 			return "register";
-		} else if (userService.findByUsername(userObj.getUserName()) != null) {
-
-			bindingResult.rejectValue("userName", "error.userexists", mesEmailExists);
+		} else if (userService.findByEmail(userObj.getEmail()) != null) {
+			bindingResult.rejectValue("userName", "email.exists");
 			logger.info("There is already an account with this email: " + userObj.getEmail());
 			return "register";
 		}
@@ -99,9 +91,8 @@ public class UserController {
 		try {
 			String appUrl = request.getContextPath();
 			eventPublisher.publishEvent(new OnRegistrationSuccessEvent(users, request.getLocale(), appUrl));
-		} catch (Exception re) {
-			//Error while sending confirmation email
-			logger.info(re.getMessage());
+		} catch (Exception e){
+			logger.info(e.getMessage());
 		}
 		logger.info("Registration success by " + users.getUsername());
 		return "redirect:/login";
