@@ -17,52 +17,69 @@
             <div class="register__form">
                 <form method="post" th:action="@{/register}" th:object="${userObj}" class="form-block">
                     <h4 class="form-block__title" th:text="#{registerTittle}">Register account</h4>
+
                     <div class="wrap-input mb-2 ">
                         <label for="full-name" class="form__label"><i class="fas fa-address-card"></i></label>
                         <input type="text" id="full-name" th:field="*{fullName}" class="form-block__input"
                                th:placeholder="#{fullName}" autocomplete="off"/>
                     </div>
-                    <div th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}">Name
+                    <div class="validate-input" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}">Name
                         Error
                     </div>
+                    <div class="error-input"></div>
+
                     <div class="wrap-input mb-2">
-                        <label for="username" class="form__label"><i class="fas fa-user"></i></label>
-                        <input type="text" th:field="*{userName}" id="username" class="form-block__input"
-                               th:placeholder="#{username}" autocomplete="off">
-                    </div>
-                    <div th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}">userName
-                        Error
-                    </div>
-                    <div class="block__wrap">
-                        <div class="wrap-input mb-2 mr-2">
-                            <label for="password" class="form__label"><i class="fas fa-lock"></i></label>
-                            <input type="password" name="email" id="password" class="form-block__input"
-                                   th:placeholder="#{password}" th:field="*{password}" autocomplete="off"/>
-                        </div>
-                        <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password
-                            Error
-                        </div>
-                        <div class="wrap-input mb-2">
-                            <label for="confirm-password" class="form__label"><i class="fas fa-lock"></i></label>
-                            <input type="password" name="confirm-password" id="confirm-password"
-                                   class="form-block__input" th:field="*{matchingPassword}"
-                                   th:placeholder="#{confirmPassword}" autocomplete="off"/>
-                        </div>
-                        <div th:if="${#fields.hasErrors('matchingPassword')}" th:errors="*{matchingPassword}">
-                            matchingPassword
-                            Error
-                        </div>
-                    </div>
-                    <div class="wrap-input">
                         <label for="email" class="form__label"><i class="fas fa-envelope"></i></label>
                         <input type="text" name="email" id="email" class="form-block__input"
                                th:placeholder="#{emailAddress}"
                                autocomplete="off" th:field="*{email}"/>
                     </div>
-                    <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email
+                    <div class="validate-input" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email
                         Error
                     </div>
+
+
+                    <div class="wrap-input mb-2">
+                        <label for="username" class="form__label"><i class="fas fa-user"></i></label>
+                        <input type="text" th:field="*{userName}" id="username" class="form-block__input"
+                               th:placeholder="#{username}" autocomplete="off">
+                    </div>
+                    <div class="validate-input" th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}">userName
+                        Error
+                    </div>
+                    <div class="error-input"></div>
+
+                    <div class="block__wrap">
+                        <div class="block__input">
+                            <div class="wrap-input mb-2">
+                                <label for="password" class="form__label"><i class="fas fa-lock"></i></label>
+                                <input type="password" name="email" id="password" class="form-block__input"
+                                       th:placeholder="#{password}" th:field="*{password}" autocomplete="off"/>
+                            </div>
+                            <div class="validate-input" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password
+                                Error
+                            </div>
+                        </div>
+
+                        <div class="block__input">
+                            <div class="wrap-input mb-2">
+                                <label for="confirm-password" class="form__label"><i class="fas fa-lock"></i></label>
+                                <input type="password" name="confirm-password" id="confirm-password"
+                                       class="form-block__input" th:field="*{matchingPassword}"
+                                       th:placeholder="#{confirmPassword}" autocomplete="off"/>
+                            </div>
+                            <div class="validate-input" th:if="${#fields.hasErrors('matchingPassword')}" th:errors="*{matchingPassword}">
+                                matchingPassword
+                                Error
+                            </div>
+                        </div>
+
+
+                    </div>
+
                     <button type="submit" class="my-btn form-block__btn">Register</button>
+
+
                     <h4 class="form__forgot">
                         <span th:text="#{forgot}">Forgot</span>
                         <a th:href="@{/forgot_password}" class="forgot__link" th:text="#{login.password}"></a>
@@ -76,5 +93,7 @@
         </div>
     </div>
 </div>
+
+ <script th:src="@{js/main.js}"></script>
 </body>
 </html>
