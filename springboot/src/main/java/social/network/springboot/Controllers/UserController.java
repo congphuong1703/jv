@@ -6,7 +6,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import social.network.springboot.DTO.UserDTO;
@@ -57,6 +56,7 @@ public class UserController {
 	@RequestMapping(value = "/forgot_password",method = RequestMethod.POST)
 	public String forgotPassword(@Valid @ModelAttribute("userObj") Users userObj, BindingResult bindingResult, Model model, WebRequest request){
 		Users user = userService.findByEmail(userObj.getEmail());
+		String messsage = messages.getMessage("notFoundEmail",null,request.getLocale());
 		if(user == null)
 		{
 			bindingResult.rejectValue("email","email.notExists");
@@ -67,13 +67,14 @@ public class UserController {
 			String appUrl = request.getContextPath();
 			eventPublisher.publishEvent(new OnForgotPasswordSuccessEvent(user, request.getLocale(), appUrl));
 		} catch (Exception re) {
+			model.addAttribute("notFoundEmail",messsage);
 			logger.info(re.getMessage());//error while sending confirmation email
 		}
 		logger.info("Send email forgot password success " + user.getUsername());
 		return "redirect:/login";
 	}
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public String save(@Validated @ModelAttribute("userObj") UserDTO userObj, BindingResult bindingResult, WebRequest request) {
+	public String save(@Valid @ModelAttribute("userObj") UserDTO userObj, BindingResult bindingResult, WebRequest request) {
 		Users users = userService.findByUsername(userObj.getUserName());
 
 		if (users != null) {

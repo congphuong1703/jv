@@ -12,9 +12,13 @@ import java.lang.annotation.*;
 @ReportAsSingleViolation
 public @interface PhoneNumberValid {
 
-	String message() default "not correct format phone number in Viet Nam";
+	String message() default "Phone number not correct format";
+
+	String messageNotEmpty() default "Field can't be empty";
+
+	boolean notEmpty() default false;
 
 	Class<?>[] groups() default {};
 
-	Class<? extends Payload>[] payload() default {};
+	Class<?>[] payload() default {};
 }

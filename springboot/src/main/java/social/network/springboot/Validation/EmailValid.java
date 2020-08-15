@@ -18,9 +18,14 @@ import javax.validation.ReportAsSingleViolation;
 @Documented
 @ReportAsSingleViolation
 public @interface EmailValid {
-	String message() default "Invalid email";
+
+	String message() default "Wrong data of string field";
+
+	String messageNotEmpty() default "Field can't be empty";
+
+	boolean notEmpty() default false;
 
 	Class<?>[] groups() default {};
 
-	Class<? extends Payload>[] payload() default {};
+	Class<?>[] payload() default {};
 }

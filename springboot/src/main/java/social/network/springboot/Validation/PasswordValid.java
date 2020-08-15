@@ -5,23 +5,17 @@ import javax.validation.ReportAsSingleViolation;
 import java.lang.annotation.*;
 
 @Documented
-@ReportAsSingleViolation
+@Constraint(validatedBy = PasswordValidator.class)
 @Target({ElementType.TYPE,ElementType.ANNOTATION_TYPE,ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = UsernameValidator.class)
-public @interface UsernameValid {
+@ReportAsSingleViolation
+public @interface PasswordValid {
 
-	String message() default "Wrong data of string field";
+	String message() default "Phone number not correct format";
 
 	String messageNotEmpty() default "Field can't be empty";
 
-	String messageLength() default "Wrong length of field";
-
 	boolean notEmpty() default false;
-
-	int min() default 6;
-
-	int max() default 20;
 
 	Class<?>[] groups() default {};
 

@@ -56,7 +56,8 @@
                     <div class="wrap-input">
                         <label for="email" class="form__label"><i class="fas fa-envelope"></i></label>
                         <input type="text" name="email" id="email" class="form-block__input"
-                               th:placeholder="#{emailAddress}" autocomplete="off" th:field="*{email}"/>
+                               th:placeholder="#{emailAddress}"
+                               autocomplete="off" th:field="*{email}"/>
                     </div>
                     <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email
                         Error

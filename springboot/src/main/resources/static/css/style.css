@@ -289,6 +289,12 @@ input,button {
 	background: #211b19;
 }
 
+/*error*/
+.error-form{
+	border: 1px solid red;
+}
+
+
 @media only screen and (max-width: 767px) {
 	.notfound .notfound-404 h1 {
 		font-size: 148px;

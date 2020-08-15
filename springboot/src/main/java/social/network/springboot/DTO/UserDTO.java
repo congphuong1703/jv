@@ -1,39 +1,31 @@
 package social.network.springboot.DTO;
 
 
-import social.network.springboot.Validation.EmailValid;
-import social.network.springboot.Validation.FieldMatch;
-
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import social.network.springboot.Validation.*;
 
 @FieldMatch.List({
-	   @FieldMatch(first = "password", second = "matchingPassword", message = "{password.notMatching}")})
+	   @FieldMatch(first = "matchingPassword", second = "password", message = "{password.notMatching}")})
 public class UserDTO {
-	@NotNull(message = "{username.notNull}")
-	@NotEmpty(message = "{username.notEmpty}")
-	@Size(min = 6, max = 20, message = "{username.size}")
+	@UsernameValid(message = "{username.valid}",
+		   messageNotEmpty = "{username.notEmpty}",
+		   messageLength = "{username.size}",
+		   notEmpty = true)
 	private String userName;
 
-	@NotNull(message = "{password.notNull}")
-	@NotEmpty(message = "{password.notEmpty}")
-	@Size(min = 6, max = 30, message = "{password.size}")
+	@PasswordValid(message = "{password.valid}",
+		   messageNotEmpty = "{password.notEmpty}",
+		   notEmpty = true)
 	private String password;
 
-	@NotNull(message = "{matchingPassword.notNull}")
-	@NotEmpty(message = "{matchingPassword.notEmpty}")
-	@Size(min = 6, max = 30, message = "{matchingPassword.size}")
 	private String matchingPassword;
 
-	@NotNull(message = "{fullName.notNull}")
-	@NotEmpty(message = "{fullName.notEmpty}")
-	@Size(min = 6,max = 30, message = "{fullName.size}")
+	@FullNameValid(notEmpty = true,
+		   messageLength = "{fullName.size}",
+		   messageNotEmpty = "{fullName.notEmpty",
+		   message = "{fullName.valid}")
 	private String fullName;
 
-	@EmailValid(message = "{email.valid}")
-	@NotEmpty(message = "{email.notEmpty}")
-	@NotNull(message = "{email.notNull}")
+	@EmailValid(message = "{email.valid}", messageNotEmpty = "{email.notEmpty}", notEmpty = true)
 	private String email;
 
 	public String getUserName() {
