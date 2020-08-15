@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.header.writers.StaticHeadersWriter;
 import social.network.springboot.ServiceImps.UserServiceImp;
 
 @Configuration
@@ -44,30 +45,34 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(final HttpSecurity http) throws Exception {
 		http
 			   .authorizeRequests()
-			   .antMatchers("/home", "/", "/register", "/confirm_registration","/forgot_password","/reset_password").permitAll()// Cho phép tất cả mọi người truy cập vào  địa chỉ này
+			   .antMatchers("/home", "/", "/register", "/confirm_registration", "/forgot_password", "/reset_password").permitAll()// Cho phép tất cả mọi người truy cập vào  địa chỉ này
 			   .antMatchers("/admin/**").hasRole("ADMIN")
 			   .and()
-				   .authorizeRequests()
-				   .anyRequest().authenticated()
+			   .authorizeRequests()
+			   .anyRequest().authenticated()
 			   .and()
-				   .formLogin() // allow user authentication with login page
-				   .loginPage("/login")
-				   .defaultSuccessUrl("/home")
-				   .permitAll()
+			   .formLogin() // allow user authentication with login page
+			   .loginPage("/login")
+			   .defaultSuccessUrl("/home")
+			   .permitAll()
 //			   .successForwardUrl("/home")
 			   .and()
-			          .rememberMe().key("jremember")
+			   .rememberMe().key("jremember")
 			   .and()
-			          .logout() // allow logout
-			          .permitAll()
+			   .logout() // allow logout
+			   .permitAll()
 			   .and()
-			          .exceptionHandling().accessDeniedPage("/access-denied");
+			   .exceptionHandling().accessDeniedPage("/access-denied")
+			   .and()
+			   .headers().defaultsDisabled()
+			   .addHeaderWriter(new StaticHeadersWriter("Cache-Control", " no-cache,max-age=0, must-revalidate"))
+			   .addHeaderWriter(new StaticHeadersWriter("Expires", "0"));
 	}
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		web
 			   .ignoring()
-			   .antMatchers("/resources/**", "/static/**","/webfonts/**", "/css/**", "/js/**", "/images/**","/template/**");
+			   .antMatchers("/resources/**", "/static/**", "/webfonts/**", "/css/**", "/js/**", "/images/**", "/template/**");
 	}
 }

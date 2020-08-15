@@ -54,7 +54,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/forgot_password",method = RequestMethod.POST)
-	public String forgotPassword(@Valid @ModelAttribute("userObj") Users userObj, BindingResult bindingResult, Model model, WebRequest request){
+	public String forgotPassword(@Valid @ModelAttribute("userObj") UserDTO userObj, BindingResult bindingResult, Model model, WebRequest request){
 		Users user = userService.findByEmail(userObj.getEmail());
 		String messsage = messages.getMessage("notFoundEmail",null,request.getLocale());
 		if(user == null)
@@ -63,11 +63,14 @@ public class UserController {
 			logger.info("Forgot password not find email: " + userObj.getEmail());
 			return "forgot_password";
 		}
+		if(bindingResult.hasErrors()){
+			return "forgot_password";
+		}
 		try {
 			String appUrl = request.getContextPath();
 			eventPublisher.publishEvent(new OnForgotPasswordSuccessEvent(user, request.getLocale(), appUrl));
 		} catch (Exception re) {
-			model.addAttribute("notFoundEmail",messsage);
+//			model.addAttribute("notFoundEmail",messsage);
 			logger.info(re.getMessage());//error while sending confirmation email
 		}
 		logger.info("Send email forgot password success " + user.getUsername());
@@ -134,6 +137,7 @@ public class UserController {
 		model.addAttribute("userObj",userDTO);
 		return "reset_password";
 	}
+
 
 	@RequestMapping(value = "/reset_password",method = RequestMethod.POST)
 	public String updatePassword(@Valid @ModelAttribute("userObj") UserPasswordDTO userObj,BindingResult bindingResult, Model model, WebRequest request){

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import social.network.springboot.DTO.UserDTO;
 import social.network.springboot.Entities.Users;
 import sun.plugin.liveconnect.SecurityContextHelper;
 
@@ -30,7 +31,7 @@ public class HomeController {
 
 	@RequestMapping(value = "/forgot_password")
 	public String forgotPassword(Model model){
-		model.addAttribute("userObj",new Users());
+		model.addAttribute("userObj",new UserDTO());
 		return "forgot_password";
 	}
 
