@@ -1,0 +1,35 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Jivas</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Rufina:400,700&display=swap" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="./assets/css/bootstrap.css"> -->
+    <link rel="stylesheet" th:href="@{css/font-awesome.css}"/>
+    <link rel="stylesheet" th:href="@{css/style.css}"/>
+</head>
+<body>
+<form>
+    <div id="notfound">
+        <div class="notfound">
+            <div class="notfound-404">
+                <h1 th:text="#{oops}">Oops!</h1>
+                <h2 th:text="#{notFound}">404 - The Page can't be found</h2>
+            </div>
+            <a th:href="@{/}" th:text="#{backHome}">Go to home</a>
+        </div>
+    </div>
+    <div id="notfound">
+        <div class="notfound">
+            <div class="notfound-404">
+                <h1 th:text="#{oops}">Oops!</h1>
+                <h2 th:text="#{notFound}">404 - The Page can't be found</h2>
+            </div>
+            <a th:href="@{/}" th:text="#{backHome}">Go to home</a>
+        </div>
+    </div>
+</form>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<title>Jivas</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Rufina:400,700&display=swap" rel="stylesheet">
+<!-- <link rel="stylesheet" href="./assets/css/bootstrap.css"> -->
+<link rel="stylesheet" th:href="@{css/font-awesome.css}"/>
+<link rel="stylesheet" th:href="@{css/style.css}"/>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII"/>
+    <title>home</title>
+</head>
+<body>
+<div class="container">
+    <h1 class="alert alert-success">Hi! We are glad to see you. Please login below.</h1>
+    <a class="btn btn-primary" th:href="@{/login}">login</a>
+</div>
+</body>
+</html>
