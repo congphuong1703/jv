@@ -6,12 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-<<<<<<< HEAD
-import org.springframework.web.bind.annotation.RequestParam;
 import social.network.springboot.DTO.UserDTO;
-=======
->>>>>>> c5448dbd3c8dbbe338d9d5054715b721c2dc20cb
-import social.network.springboot.Entities.Users;
 
 @Controller
 public class HomeController {
