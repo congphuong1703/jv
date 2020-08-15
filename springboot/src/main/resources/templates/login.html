@@ -19,19 +19,25 @@
             <div class="login__form">
                 <form class="form-block" th:action="@{/login}" method="post">
                     <h4 class="form-block__title" th:text="#{memberLogin}">Member Login</h4>
-                    <div class="wrap-input">
+                    <div class="alert-input" >userName
+                        Error
+                    </div>
+
+                    <div class="wrap-input mb-2">
                         <label for="username" class="form__label"><i class="fas fa-user"></i></label>
                         <input type="text" name="username" id="username" class="form-block__input"
                                th:placeholder="#{username}" autocomplete="off">
                         <!--                        <div class="alert alert-danger" th:if="${param.error}">-->
                         <!--                        <div class="alert alert-warning" th:if="${param.logout}">-->
                     </div>
-                    <div class="wrap-input">
+
+                    <div class="wrap-input mb-2">
                         <label for="password" class="form__label"><i class="fas fa-lock"></i></label>
                         <input type="password" name="password" class="form-block__input" id="password"
                                th:placeholder="#{password}">
 
                     </div>
+
                     <button type="submit" class="my-btn form-block__btn" th:text="#{login}">Login</button>
                     <h4 class="form__forgot">
                         <span th:text="#{forgot}">Forgot</span>

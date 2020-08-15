@@ -43,7 +43,7 @@ html {
 body {
 	box-sizing: border-box;
 	color: #333;
-	font-family: NunitoSans-Regular;	
+	font-family: NunitoSans-Regular;
 }
 a {
 	text-decoration: none;
@@ -116,11 +116,18 @@ input,button {
 
 .wrap-input {
 	display: flex;
-	margin-bottom: 3rem;
+	margin-bottom: 2rem;
 	padding: 0 2rem;	
 	border-radius: 2.5rem;
 	box-shadow: 0 2px 8px 2px rgba(0,0,0,0.1);
-
+	
+}
+.alert-input {
+	margin-bottom: 2rem;
+	padding: 1.4rem;
+	border-radius: 2.5rem;
+	box-shadow: 0 2px 8px 2px rgba(0,0,0,0.1);
+	font-size: 2rem;
 }
 .my-btn {
 	font-size: 1.5rem;
@@ -202,7 +209,9 @@ input,button {
 }
 .block__wrap{
 	display: flex;
-	flex-wrap: wrap;
+}
+.block__input:not(:last-child) {
+   margin-right: 2rem;
 }
 .mr-2{
 	margin-right: 2rem;
@@ -292,8 +301,20 @@ input,button {
 /*error*/
 .error-form{
 	border: 1px solid red;
-}
 
+}
+/* js validate
+.error-input {
+	font-size: 1.6rem;
+	color: #ff3f1d;
+}
+*/
+ /*  server validate */
+.validate-input {
+	font-size: 1.6rem;
+	color: #ff3f1d;
+	padding: 0rem 2rem 2rem;
+}
 
 @media only screen and (max-width: 767px) {
 	.notfound .notfound-404 h1 {
@@ -328,6 +349,7 @@ input,button {
 	.login {
 		width: 80%;
 	}
+
 }
 
 @media only screen and (max-width: 767px) {
@@ -341,6 +363,19 @@ input,button {
 	}
 	.login__form  {
 		width: 90%;
+	}
+	.register__form {
+		width: 90%;
+	}
+	.block__wrap {
+		flex-wrap: wrap;
+	}
+	.block__input {
+		width: 100%;
+
+	}
+	.block__input:not(:last-child) {
+		margin: 0;
 	}
 
 }
