@@ -3,6 +3,8 @@ package social.network.springboot.DTO;
 
 import social.network.springboot.Validation.*;
 
+import javax.validation.constraints.NotNull;
+
 @FieldMatch.List({
 	   @FieldMatch(first = "matchingPassword", second = "password", message = "{password.notMatching}")})
 public class UserDTO {
@@ -17,6 +19,7 @@ public class UserDTO {
 		   notEmpty = true)
 	private String password;
 
+	@NotNull(message = "notNull")
 	private String matchingPassword;
 
 	@FullNameValid(notEmpty = true,

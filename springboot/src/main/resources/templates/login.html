@@ -17,19 +17,15 @@
             <div class="login__form">
                 <form class="form-block" th:action="@{/login}" method="post">
                     <h4 class="form-block__title" th:text="#{memberLogin}">Member Login</h4>
-                    <div class="alert-input" >userName
-                        Error
-                    </div>
-
-                    <div class="wrap-input mb-2">
+                    <div class="alert alert-error" th:if="${param.logout}" th:text="#{logoutSuccess}"></div>
+                    <div class="alert alert-error" th:if="${param.error}" th:text="#{loginError}"></div>
+                    <div class="wrap-input mb-1">
                         <label for="username" class="form__label"><i class="fas fa-user"></i></label>
                         <input type="text" name="username" id="username" class="form-block__input"
                                th:placeholder="#{username}" autocomplete="off">
-                        <!--                        <div class="alert alert-danger" th:if="${param.error}">-->
-                        <!--                        <div class="alert alert-warning" th:if="${param.logout}">-->
                     </div>
 
-                    <div class="wrap-input mb-2">
+                    <div class="wrap-input mb-1">
                         <label for="password" class="form__label"><i class="fas fa-lock"></i></label>
                         <input type="password" name="password" class="form-block__input" id="password"
                                th:placeholder="#{password}">
@@ -50,12 +46,5 @@
         </div>
     </div>
 </div>
-
-<!-- jQuery first, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-<!-- <script type="text/javascript" src="./assets/js/bootstrap.js"></script> -->
-<script type="text/javascript" th:href="@{js/main.js}"></script>
 </body>
 </html>

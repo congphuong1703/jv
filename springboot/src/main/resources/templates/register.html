@@ -1,5 +1,5 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Jivas</title>
@@ -18,67 +18,74 @@
                 <form method="post" th:action="@{/register}" th:object="${userObj}" class="form-block">
                     <h4 class="form-block__title" th:text="#{registerTittle}">Register account</h4>
 
-                    <div class="wrap-input mb-2 ">
+                    <div class="wrap-input mb-1 ">
                         <label for="full-name" class="form__label"><i class="fas fa-address-card"></i></label>
                         <input type="text" id="full-name" th:field="*{fullName}" class="form-block__input"
-                               th:placeholder="#{fullName}" autocomplete="off"/>
+                               th:placeholder="#{fullName}" autocomplete="off" th:errorclass="error-border"/>
+                        <label for="full-name" class="form__label form__error" data-placement="auto"
+                               data-toggle="tooltip" th:if="${#fields.hasErrors('fullName')}" th:errorclass="error-form"
+                               name="fullName">
+                            <i class="fas fa-exclamation"></i></label>
                     </div>
-                    <div class="validate-input" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}">Name
-                        Error
-                    </div>
-                    <div class="error-input"></div>
-
-                    <div class="wrap-input mb-2">
+                    <div class="wrap-input mb-1">
                         <label for="email" class="form__label"><i class="fas fa-envelope"></i></label>
                         <input type="text" name="email" id="email" class="form-block__input"
                                th:placeholder="#{emailAddress}"
-                               autocomplete="off" th:field="*{email}"/>
+                               autocomplete="off" th:field="*{email}" th:errorclass="error-border"/>
+                        <label for="email" class="form__label form__error" data-placement="auto"
+                               data-toggle="tooltip" th:if="${#fields.hasErrors('email')}" th:errorclass="error-color"
+                               name="email">
+                            <i class="fas fa-exclamation"></i>
+                        </label>
                     </div>
-                    <div class="validate-input" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email
-                        Error
-                    </div>
-
-
-                    <div class="wrap-input mb-2">
+                    <div class="wrap-input mb-1">
                         <label for="username" class="form__label"><i class="fas fa-user"></i></label>
                         <input type="text" th:field="*{userName}" id="username" class="form-block__input"
-                               th:placeholder="#{username}" autocomplete="off">
+                               th:placeholder="#{username}" autocomplete="off" th:errorclass="error-border">
+                        <label class="form__label form__error" data-placement="auto" name="userName"
+                               data-toggle="tooltip" th:if="${#fields.hasErrors('userName')}"
+                               th:errorclass="error-color">
+                            <i class="fas fa-exclamation"></i>
+                        </label>
                     </div>
-                    <div class="validate-input" th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}">userName
-                        Error
-                    </div>
-                    <div class="error-input"></div>
-
                     <div class="block__wrap">
                         <div class="block__input">
-                            <div class="wrap-input mb-2">
+                            <div class="wrap-input mb-1">
                                 <label for="password" class="form__label"><i class="fas fa-lock"></i></label>
                                 <input type="password" name="email" id="password" class="form-block__input"
-                                       th:placeholder="#{password}" th:field="*{password}" autocomplete="off"/>
-                            </div>
-                            <div class="validate-input" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password
-                                Error
+                                       th:placeholder="#{password}" th:field="*{password}" autocomplete="off"
+                                       th:errorclass="error-border"/>
+                                <label for="password" class="form__label form__error" data-placement="auto"
+                                       data-toggle="tooltip" name="password" th:if="${#fields.hasErrors('password')}"
+                                       th:errorclass="error-color">
+                                    <i class="fas fa-exclamation"></i>
+                                </label>
                             </div>
                         </div>
 
                         <div class="block__input">
-                            <div class="wrap-input mb-2">
-                                <label for="confirm-password" class="form__label"><i class="fas fa-lock"></i></label>
+                            <div class="wrap-input mb-1">
+                                <label for="confirm-password" class="form__label"><i
+                                        class="fas fa-lock"></i></label>
                                 <input type="password" name="confirm-password" id="confirm-password"
                                        class="form-block__input" th:field="*{matchingPassword}"
-                                       th:placeholder="#{confirmPassword}" autocomplete="off"/>
-                            </div>
-                            <div class="validate-input" th:if="${#fields.hasErrors('matchingPassword')}" th:errors="*{matchingPassword}">
-                                matchingPassword
-                                Error
+                                       th:placeholder="#{confirmPassword}" autocomplete="off"
+                                       th:errorclass="error-border"/>
+                                <label for="confirm-password" class="form__label form__error"
+                                       data-toggle="tooltip" data-placement="auto"
+                                       th:if="${#fields.hasErrors('matchingPassword')}" name="matchingPassword"
+                                       th:errorclass="error-form">
+                                    <i class="fas fa-exclamation"></i></label>
                             </div>
                         </div>
-
-
+                    </div>
+                    <div class="form-checkbox__label mb-1">
+                        <label role="checkbox"><input type="checkbox"></label>
+                        <span th:text="#{register.agreeTerm}">I agree to</span>
+                        <a th:href="@{/terms}" th:text="#{register.terms}">Jivas Terms of Service</a>
                     </div>
 
-                    <button type="submit" class="my-btn form-block__btn">Register</button>
-
+                    <button type="submit" class="my-btn form-block__btn" th:text="#{register.submit}">Register</button>
 
                     <h4 class="form__forgot">
                         <span th:text="#{forgot}">Forgot</span>
@@ -86,14 +93,17 @@
                     </h4>
                     <h4 class="form__register">
                         <span th:text="#{alreadyAccount}">Already Have An</span>
-                        <a th:href="@{/login}" class="forgot__link" th:text="#{createAccount}">&nbsp;Account&nbsp;?</a>
+                        <a th:href="@{/login}" class="forgot__link"
+                           th:text="#{createAccount}">&nbsp;Account&nbsp;?</a>
                     </h4>
                 </form>
             </div>
         </div>
     </div>
 </div>
-
- <script th:src="@{js/main.js}"></script>
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{js/main.js}"></script>
 </body>
 </html>

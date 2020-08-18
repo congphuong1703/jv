@@ -41,4 +41,9 @@ public class HomeController {
 	public String admin(){
 		return "admin/admin";
 	}
+
+	@RequestMapping(value = "/terms")
+	public String term(Model model){
+		return "terms";
+	}
 }

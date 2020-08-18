@@ -1,6 +1,7 @@
 package social.network.springboot.DTO;
 
 import social.network.springboot.Validation.FieldMatch;
+import social.network.springboot.Validation.PasswordValid;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -9,24 +10,13 @@ import javax.validation.constraints.Size;
 	   @FieldMatch(first = "password", second = "matchingPassword", message = "The password fields must match") })
 public class UserPasswordDTO {
 
-	@NotNull
-	private Long id;
-
-	@NotNull(message = "is required")
-	@Size(min = 1, message = "is required")
+	@PasswordValid(message = "{password.valid}",
+		   messageNotEmpty = "{password.notEmpty}",
+		   notEmpty = true)
 	private String password;
 
-	@NotNull(message = "is required")
-	@Size(min = 1, message = "is required")
+	@NotNull(message = "notNull")
 	private String matchingPassword;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getPassword() {
 		return password;
