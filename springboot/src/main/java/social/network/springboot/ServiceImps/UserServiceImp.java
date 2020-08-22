@@ -45,9 +45,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
 	public Users registerUser(UserDTO userDto) {
 		Users user = new Users();
 		String hashedPassword = passwordEncoder.encode(userDto.getPassword());
-
 //		String fullName = userDto.getFullName();
-
 //		user.setFirstName(fullName.substring(0,fullName.indexOf(" ")));
 //		user.setLastName(fullName.substring(fullName.indexOf(" ") + 1, fullName.length()));
 		user.setFullName(userDto.getFullName());
@@ -73,7 +71,6 @@ public class UserServiceImp implements UserService, UserDetailsService {
 	@Override
 	public Users findByPhoneNumber(String phoneNumber) {
 		return userRepository.findByPhoneNumber(phoneNumber);
-
 	}
 
 	@Override
@@ -83,7 +80,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
 
 	@Override
 	public Users findByUsername(String username) {
-		return userRepository.findByUsername(username);
+		return userRepository.findByUsername(username.toLowerCase());
 	}
 
 	@Override
@@ -105,11 +102,11 @@ public class UserServiceImp implements UserService, UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		// Kiểm tra xem user có tồn tại trong database không?
 		Users users = this.findByUsername(username);
-		if (users == null || users.getStatus() == EnumStatus.INACTIVE) {
+		if (users == null || users.isActive() == false) {
 			throw new UsernameNotFoundException("Invalid username or password.");
 		}
 		try {
-			if (users.getStatus() == EnumStatus.INACTIVE) {
+			if (users.isActive() == false) {
 				throw new UsernameNotFoundException("Please enable your account.");
 			}
 		} catch (UsernameNotFoundException e) {
@@ -132,15 +129,20 @@ public class UserServiceImp implements UserService, UserDetailsService {
 			return false;
 		}
 		if ((verificationToken.getExpiryDate().getTime() - calendar.getTime().getTime()) <= 0) {
+			verificationToken.setDelete(true);
 			return false;
 		}
+		if (verificationToken.isDelete())
+			return false;
 		return true;
 	}
 
 	@Override
-	public void updatePassword(UserPasswordDTO userPasswordDTO){
-		Users users = this.getUserById(userPasswordDTO.getId());
+	public void updatePassword(UserPasswordDTO userPasswordDTO) {
+		Users users = this.findByUsername(userPasswordDTO.getUsername());
 		users.setPassword(passwordEncoder.encode(userPasswordDTO.getPassword()));
 		this.saveUser(users);
 	}
+
+
 }

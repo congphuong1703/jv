@@ -35,5 +35,4 @@ public interface UserService {
 
 	public void updatePassword(UserPasswordDTO userPasswordDTO);
 
-
 }

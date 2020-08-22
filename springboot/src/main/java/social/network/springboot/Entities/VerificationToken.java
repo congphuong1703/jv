@@ -9,7 +9,7 @@ import java.util.Calendar;
 @Table(name = "verification_token")
 public class VerificationToken {
 
-	private static final int EXPIRATION = 60 * 24;
+	private static final int EXPIRATION = 30;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,6 +29,9 @@ public class VerificationToken {
 	@Column(name = "expiryDate")
 	private Date expiryDate;
 
+	@Column(name = "isDelete")
+	private boolean isDelete;
+
 	public VerificationToken() {
 	}
 
@@ -41,7 +44,6 @@ public class VerificationToken {
 	public VerificationToken(final String token, final Users user) {
 		super();
 		Calendar calendar = Calendar.getInstance();
-
 		this.token = token;
 		this.user = user;
 		this.createdDate = new Date(calendar.getTime().getTime());
@@ -55,6 +57,14 @@ public class VerificationToken {
 		// calendar.setTimeInMillis(new Date().getTime());
 		calendar.add(Calendar.MINUTE, expiryTimeInMinutes);
 		return new Date(calendar.getTime().getTime());
+	}
+
+	public boolean isDelete() {
+		return isDelete;
+	}
+
+	public void setDelete(boolean delete) {
+		isDelete = delete;
 	}
 
 	public Long getId() {

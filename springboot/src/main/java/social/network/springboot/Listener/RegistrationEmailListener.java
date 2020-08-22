@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Component
-public class RegistrationEmailListener implements ApplicationListener<OnRegistrationSuccessEvent> {
+public class RegistrationEmailListener implements ApplicationListener<VerificationURLEvent> {
 
 	@Autowired
 	private VerificationTokenService verificationTokenService;
@@ -33,12 +33,12 @@ public class RegistrationEmailListener implements ApplicationListener<OnRegistra
 	private Configuration configuration;
 
 	@Override
-	public void onApplicationEvent(OnRegistrationSuccessEvent event) {
+	public void onApplicationEvent(VerificationURLEvent event) {
 		this.confirmRegistration(event);
 	}
 
 
-	private void confirmRegistration(OnRegistrationSuccessEvent event) {
+	private void confirmRegistration(VerificationURLEvent event) {
 		Users users = event.getUsers();
 		String token = UUID.randomUUID().toString();
 		//get email to form register

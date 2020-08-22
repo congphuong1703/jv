@@ -1,14 +1,10 @@
 package social.network.springboot.Listener;
 
-import freemarker.template.Configuration;
-import freemarker.template.Template;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
-import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import social.network.springboot.Entities.Users;
 import social.network.springboot.Services.VerificationTokenService;
 
@@ -18,7 +14,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Component
-public class ForgotPasswordEmailListener implements ApplicationListener<OnForgotPasswordSuccessEvent> {
+public class ForgotPasswordEmailListener implements ApplicationListener<VerificationURLEvent> {
 
 	@Autowired
 	private VerificationTokenService verificationTokenService;
@@ -33,11 +29,11 @@ public class ForgotPasswordEmailListener implements ApplicationListener<OnForgot
 	private RegistrationEmailListener registrationEmailListener;
 
 	@Override
-	public void onApplicationEvent(OnForgotPasswordSuccessEvent event) {
+	public void onApplicationEvent(VerificationURLEvent event) {
 		this.confirmResetPassword(event);
 	}
 
-	public void confirmResetPassword(OnForgotPasswordSuccessEvent event){
+	public void confirmResetPassword(VerificationURLEvent event){
 		Users users = event.getUsers();
 		String token = UUID.randomUUID().toString();
 		verificationTokenService.createVerificationToken(users,token);

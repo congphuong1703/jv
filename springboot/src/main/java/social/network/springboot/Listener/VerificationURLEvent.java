@@ -5,14 +5,14 @@ import social.network.springboot.Entities.Users;
 
 import java.util.Locale;
 
-public class OnForgotPasswordSuccessEvent extends ApplicationEvent {
+public class VerificationURLEvent extends ApplicationEvent {
 
 	private static final long serialVersionUID = 1L;
 	private String appUrl;
 	private Locale locale;
 	private Users users;
 
-	public OnForgotPasswordSuccessEvent(Users users,Locale locale,String appUrl) {
+	public VerificationURLEvent(Users users, Locale locale, String appUrl) {
 		super(users);
 		this.appUrl = appUrl;
 		this.locale = locale;

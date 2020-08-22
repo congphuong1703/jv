@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Jivas</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- <link rel="stylesheet" href="./assets/css/bootstrap.css"> -->
     <link rel="stylesheet" th:href="@{css/font-awesome.css}"/>
     <link rel="stylesheet" th:href="@{css/style.css}"/>
 </head>
@@ -22,14 +21,13 @@
                     <div class="wrap-input mb-1">
                         <label for="username" class="form__label"><i class="fas fa-user"></i></label>
                         <input type="text" name="username" id="username" class="form-block__input"
-                               th:placeholder="#{username}" autocomplete="off">
+                               th:placeholder="#{username}">
                     </div>
 
                     <div class="wrap-input mb-1">
                         <label for="password" class="form__label"><i class="fas fa-lock"></i></label>
                         <input type="password" name="password" class="form-block__input" id="password"
                                th:placeholder="#{password}">
-
                     </div>
 
                     <button type="submit" class="my-btn form-block__btn" th:text="#{login}">Login</button>

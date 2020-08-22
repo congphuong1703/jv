@@ -8,16 +8,16 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
+import social.network.springboot.DTO.EmailDTO;
 import social.network.springboot.DTO.UserDTO;
 import social.network.springboot.DTO.UserPasswordDTO;
 import social.network.springboot.Entities.Users;
 import social.network.springboot.Entities.VerificationToken;
-import social.network.springboot.Enums.EnumStatus;
-import social.network.springboot.Listener.OnForgotPasswordSuccessEvent;
-import social.network.springboot.Listener.OnRegistrationSuccessEvent;
+import social.network.springboot.Listener.VerificationURLEvent;
 import social.network.springboot.Services.UserService;
 import social.network.springboot.Services.VerificationTokenService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Locale;
 import java.util.logging.Logger;
@@ -54,12 +54,11 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/forgot_password", method = RequestMethod.POST)
-	public String forgotPassword(@Valid @ModelAttribute("userObj") UserDTO userObj, BindingResult bindingResult, Model model, WebRequest request) {
-		Users user = userService.findByEmail(userObj.getEmail());
-		String messsage = messages.getMessage("notFoundEmail", null, request.getLocale());
+	public String forgotPassword(@Valid @ModelAttribute("userObj") EmailDTO emailDTO, BindingResult bindingResult, Model model, WebRequest request) {
+		Users user = userService.findByEmail(emailDTO.getEmail());
 		if (user == null) {
 			bindingResult.rejectValue("email", "email.notExists");
-			logger.info("Forgot password not find email: " + userObj.getEmail());
+			logger.info("Forgot password not find email: " + emailDTO.getEmail());
 			return "forgot_password";
 		}
 		if (bindingResult.hasErrors()) {
@@ -67,13 +66,12 @@ public class UserController {
 		}
 		try {
 			String appUrl = request.getContextPath();
-			eventPublisher.publishEvent(new OnForgotPasswordSuccessEvent(user, request.getLocale(), appUrl));
+			eventPublisher.publishEvent(new VerificationURLEvent(user, request.getLocale(), appUrl));
 		} catch (Exception re) {
-//			model.addAttribute("notFoundEmail",messsage);
 			logger.info(re.getMessage());//error while sending confirmation email
 		}
 		logger.info("Send email forgot password success " + user.getUsername());
-		return "redirect:/login";
+		return "redirect:https://mail.google.com";
 	}
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
@@ -94,12 +92,12 @@ public class UserController {
 		users = userService.registerUser(userObj);
 		try {
 			String appUrl = request.getContextPath();
-			eventPublisher.publishEvent(new OnRegistrationSuccessEvent(users, request.getLocale(), appUrl));
+			eventPublisher.publishEvent(new VerificationURLEvent(users, request.getLocale(), appUrl));
 		} catch (Exception e) {
 			logger.info(e.getMessage());
 		}
 		logger.info("Registration success by " + users.getUsername());
-		return "redirect:/login";
+		return "redirect:https://mail.google.com";
 	}
 
 	@RequestMapping(value = "/confirm_registration")
@@ -115,9 +113,9 @@ public class UserController {
 			return "access_denied";
 		}
 		Users users = verificationToken.getUser();
-		users.setStatus(EnumStatus.ACTIVE);
+		users.setActive(true);
+		verificationTokenService.deleteByToken(token);
 		return "redirect:/login";
-
 	}
 
 	@RequestMapping(value = "/reset_password")
@@ -125,6 +123,7 @@ public class UserController {
 		VerificationToken verificationToken = verificationTokenService.findByToken(token);
 		boolean checkConfirm = userService.confirmEmail(verificationToken);
 		UserPasswordDTO userDTO = new UserPasswordDTO();
+		userDTO.setUsername(verificationToken.getUser().getUsername());
 		Locale locale = request.getLocale();
 
 		if (!checkConfirm) {
@@ -133,15 +132,25 @@ public class UserController {
 			return "access_denied";
 		}
 		model.addAttribute("userObj", userDTO);
+		logger.info(String.valueOf(userDTO.getUsername()));
+		verificationTokenService.deleteByToken(token);
 		return "reset_password";
 	}
 
-
 	@RequestMapping(value = "/reset_password", method = RequestMethod.POST)
-	public String updatePassword(@Valid @ModelAttribute("userObj") UserPasswordDTO userObj, BindingResult bindingResult, Model model, WebRequest request) {
+	public String updatePassword(@Valid @ModelAttribute("userObj") UserPasswordDTO userObj, BindingResult bindingResult, HttpServletRequest httpServletRequest, Model model, WebRequest request) {
 		String resetSuccess = messages.getMessage("resetPasswordSuccess", null, request.getLocale());
+		String notFindUsername = messages.getMessage("resetPasswordSuccess", null, request.getLocale());
+		logger.info(httpServletRequest.getContextPath());
+		if (userService.findByUsername(userObj.getUsername()) == null) {
+			bindingResult.rejectValue("username", notFindUsername);
+			return "reset_password";
+		}
+		if (bindingResult.hasErrors()) {
+			return "reset_password";
+		}
 		userService.updatePassword(userObj);
 		model.addAttribute("resetSuccess", resetSuccess);
-		return "reset_password";
+		return "redirect:/login";
 	}
 }

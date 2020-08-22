@@ -7,6 +7,8 @@ import social.network.springboot.Entities.VerificationToken;
 import social.network.springboot.Repositories.VerificationTokenRepository;
 import social.network.springboot.Services.VerificationTokenService;
 
+import java.util.List;
+
 @Service
 public class VerificationTokenServiceImp implements VerificationTokenService {
 
@@ -28,4 +30,18 @@ public class VerificationTokenServiceImp implements VerificationTokenService {
 		return verificationTokenRepository.findByToken(token);
 	}
 
+	@Override
+	public void deleteByToken(String token) {
+		VerificationToken verificationToken = this.findByToken(token);
+		verificationToken.setDelete(true);
+		verificationTokenRepository.save(verificationToken);
+	}
+
+	public List<VerificationToken> findAllByUserUsername(String username){
+		return verificationTokenRepository.findAllByUserUsername(username.toLowerCase());
+	}
+
+	public List<VerificationToken> findAllByUserEmail(String email){
+		return verificationTokenRepository.findAllByUserEmail(email.toLowerCase());
+	}
 }

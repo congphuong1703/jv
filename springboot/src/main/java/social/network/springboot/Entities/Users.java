@@ -76,4 +76,10 @@ public class Users {
 
 	@Column(name ="updatedDate")
 	private Timestamp updateDate;
+
+	@Column(name = "isDelete")
+	private boolean isDelete;
+
+	@Column(name = "is_active")
+	private boolean isActive;
 }

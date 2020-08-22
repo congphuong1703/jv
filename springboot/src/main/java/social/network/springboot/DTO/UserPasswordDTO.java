@@ -7,8 +7,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @FieldMatch.List({
-	   @FieldMatch(first = "password", second = "matchingPassword", message = "The password fields must match") })
+	   @FieldMatch(first = "matchingPassword", second = "password", message = "The password fields must match") })
 public class UserPasswordDTO {
+
+	private String username;
 
 	@PasswordValid(message = "{password.valid}",
 		   messageNotEmpty = "{password.notEmpty}",
@@ -17,6 +19,14 @@ public class UserPasswordDTO {
 
 	@NotNull(message = "notNull")
 	private String matchingPassword;
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
 	public String getPassword() {
 		return password;
