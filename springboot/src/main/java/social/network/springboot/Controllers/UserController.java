@@ -46,14 +46,14 @@ public class UserController {
 		return "register";
 	}
 
-//	@RequestMapping(value = "/{username}", method = RequestMethod.GET)
-//	public String userProfile(@PathVariable(value = "username") String username, Model model, HttpServletRequest request) {
-//		if (username.equals(request.getUserPrincipal().getName()))
-//			return "current-user-profile";
-//		Users user = userService.findByUsername(username);
-//		model.addAttribute("user", user);
-//		return "user-profile";
-//	}
+	@RequestMapping(value = "/user/{username}", method = RequestMethod.GET)
+	public String userProfile(@PathVariable(value = "username") String username, Model model, HttpServletRequest request) {
+		if (username.equals(request.getUserPrincipal().getName()))
+			return "current-user-profile";
+		Users user = userService.findByUsername(username);
+		model.addAttribute("user", user);
+		return "user-profile";
+	}
 
 	@RequestMapping(value = "/forgot_password", method = RequestMethod.POST)
 	public String forgotPassword(@Valid @ModelAttribute("userObj") EmailDTO emailDTO, BindingResult bindingResult, Model model, WebRequest request) {

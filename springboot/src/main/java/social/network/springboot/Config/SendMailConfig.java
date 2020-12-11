@@ -19,7 +19,7 @@ public class SendMailConfig {
 		javaMailSender.setPort(587);
 		javaMailSender.setProtocol("smtp");
 		javaMailSender.setUsername("congphuong.jav62@gmail.com");
-		javaMailSender.setPassword("Conghpuong1a");
+		javaMailSender.setPassword("mail");
 		javaMailSender.setDefaultEncoding("UTF-8");
 
 		mailProperties.put("mail.smtp.auth", "true");

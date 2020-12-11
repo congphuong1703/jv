@@ -35,4 +35,6 @@ public interface UserService {
 
 	public void updatePassword(UserPasswordDTO userPasswordDTO);
 
+	public void registerUserByOauth(String email, String fullname, String username);
+
 }

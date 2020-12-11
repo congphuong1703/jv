@@ -25,6 +25,13 @@ public class Users {
 		this.role = role;
 	}
 
+	public Users(String username, String email,String fullName) {
+		super();
+		this.username = username;
+		this.email = email;
+		this.fullName = fullName;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")

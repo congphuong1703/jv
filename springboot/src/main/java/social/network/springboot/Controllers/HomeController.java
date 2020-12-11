@@ -32,11 +32,11 @@ public class HomeController {
 //
 //		//check role
 //		//comment are wrong
-//		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//
-//		if (!(authentication instanceof AnonymousAuthenticationToken)) {
-//			return "redirect:/home";
-//		}
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+			return "redirect:/home";
+		}
 		return "login";
 	}
 

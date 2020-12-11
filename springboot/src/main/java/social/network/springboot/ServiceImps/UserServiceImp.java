@@ -5,8 +5,6 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-import org.springframework.web.context.request.WebRequest;
 import social.network.springboot.DTO.UserDTO;
 import social.network.springboot.DTO.UserPasswordDTO;
 import social.network.springboot.Entities.Users;
@@ -54,6 +52,11 @@ public class UserServiceImp implements UserService, UserDetailsService {
 		userRepository.save(user);
 //		user.setRoles(Arrays.asList(roleDAO.findByRoleName("ROLE_CANDIDATE")));
 		return user;
+	}
+
+	public void registerUserByOauth(String email,String fullname,String username){
+		Users users = new Users(username,email,fullname);
+		userRepository.save(users);
 	}
 
 	@Override

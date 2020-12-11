@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.header.writers.StaticHeadersWriter;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import social.network.springboot.Oauth.FacebookOauth.Oauth2LoginSuccessHandler;
 import social.network.springboot.ServiceImps.FacebookOauth2UserServiceImp;
 import social.network.springboot.ServiceImps.UserServiceImp;
 import social.network.springboot.Services.FacebookOauth2UserService;
@@ -29,6 +30,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private FacebookOauth2UserServiceImp facebookOauth2UserServiceImp;
+
+	@Autowired
+	private Oauth2LoginSuccessHandler oauth2LoginSuccessHandler;
 
 	@Bean
 	public DaoAuthenticationProvider authenticationProvider() {
@@ -56,8 +60,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			   .authorizeRequests()
 			   .antMatchers("/home", "/", "/register", "/confirm_registration", "/forgot_password", "/reset_password", "/terms", "/oauth2/**")
 			   .permitAll()// Cho phép tất cả mọi người truy cập vào  địa chỉ này
-//			   .antMatchers("/admin/**").hasRole("ADMIN")
-//			   .antMatchers("/users/**").authenticated()
+			   .antMatchers("/admin/**").hasRole("ADMIN")
+			   .antMatchers("/user/**").authenticated()
 			   .and()
 			   .authorizeRequests()
 			   .anyRequest()
@@ -73,6 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			   .loginPage("/login")
 			   .userInfoEndpoint().userService(facebookOauth2UserServiceImp)
 			   .and()
+			   .successHandler(oauth2LoginSuccessHandler)
 			   .and()
 			   .rememberMe().key("jremember")
 			   .and()

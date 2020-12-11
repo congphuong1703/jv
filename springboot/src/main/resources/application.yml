@@ -29,8 +29,8 @@ spring:
       client:
         registration:
           facebook:
-            client-id: 1081804428919463
-            client-secret: 6d554f4c4e437bf4f1cac0100e845c3e
+            client-id:
+            client-secret: 
             accessTokenUri: https://graph.facebook.com/oauth/access_token
             userAuthorizationUri: https://www.facebook.com/dialog/oauth
             tokenName: oauth_token
@@ -59,8 +59,8 @@ spring:
 #server.error.whitelabel.enabled=false
 #server.error.path=/error
 #--------------Facebook
-#spring.security.oauth2.client.registration.facebook.client-id=1081804428919463
-#spring.security.oauth2.client.registration.facebook.client-secret=6d554f4c4e437bf4f1cac0100e845c3e
+#spring.security.oauth2.client.registration.facebook.client-id=
+#spring.security.oauth2.client.registration.facebook.client-secret=
 #        google:
 #          clientId: 5014057553-8gm9um6vnli3cle5rgigcdjpdrid14m9.apps.googleusercontent.com
 #          clientSecret: tWZKVLxaD_ARWsriiiUFYoIk

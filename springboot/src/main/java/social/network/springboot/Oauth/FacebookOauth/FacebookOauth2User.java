@@ -6,11 +6,11 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import java.util.Collection;
 import java.util.Map;
 
-public class CustomOauth2User implements OAuth2User {
+public class FacebookOauth2User implements OAuth2User {
 
 	private OAuth2User oAuth2User;
 
-	public CustomOauth2User(OAuth2User oAuth2User){
+	public FacebookOauth2User(OAuth2User oAuth2User){
 		this.oAuth2User = oAuth2User;
 	}
 	/**
@@ -46,5 +46,13 @@ public class CustomOauth2User implements OAuth2User {
 
 	public String getFullName(){
 		return oAuth2User.getAttribute("name");
+	}
+
+	public String getEmail(){
+		return oAuth2User.getAttribute("email");
+	}
+
+	public String getUsername(){
+		return oAuth2User.getAttribute("id");
 	}
 }
