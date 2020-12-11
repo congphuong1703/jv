@@ -46,12 +46,14 @@ public class UserController {
 		return "register";
 	}
 
-	@RequestMapping(value = "/getUser/{id}", method = RequestMethod.GET)
-	public String userProfile(@PathVariable(value = "id") Long userId, Model model) {
-		Users user = userService.getUserById(userId);
-		model.addAttribute("user", user);
-		return "userProfile";
-	}
+//	@RequestMapping(value = "/{username}", method = RequestMethod.GET)
+//	public String userProfile(@PathVariable(value = "username") String username, Model model, HttpServletRequest request) {
+//		if (username.equals(request.getUserPrincipal().getName()))
+//			return "current-user-profile";
+//		Users user = userService.findByUsername(username);
+//		model.addAttribute("user", user);
+//		return "user-profile";
+//	}
 
 	@RequestMapping(value = "/forgot_password", method = RequestMethod.POST)
 	public String forgotPassword(@Valid @ModelAttribute("userObj") EmailDTO emailDTO, BindingResult bindingResult, Model model, WebRequest request) {
@@ -114,6 +116,7 @@ public class UserController {
 		}
 		Users users = verificationToken.getUser();
 		users.setActive(true);
+		userService.saveUser(users);
 		verificationTokenService.deleteByToken(token);
 		return "redirect:/login";
 	}

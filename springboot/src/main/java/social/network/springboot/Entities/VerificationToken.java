@@ -9,7 +9,7 @@ import java.util.Calendar;
 @Table(name = "verification_token")
 public class VerificationToken {
 
-	private static final int EXPIRATION = 30;
+	private static final int EXPIRATION = 30 * 30;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

@@ -24,9 +24,6 @@ public class RegistrationEmailListener implements ApplicationListener<Verificati
 	private VerificationTokenService verificationTokenService;
 
 	@Autowired
-	private MessageSource messages;
-
-	@Autowired
 	private JavaMailSender mailSender;
 
 	@Autowired

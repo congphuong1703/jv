@@ -1,8 +1,10 @@
 package social.network.springboot.Config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,8 +13,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.header.writers.StaticHeadersWriter;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import social.network.springboot.ServiceImps.FacebookOauth2UserServiceImp;
 import social.network.springboot.ServiceImps.UserServiceImp;
+import social.network.springboot.Services.FacebookOauth2UserService;
 
 @Configuration
 @EnableWebSecurity
@@ -20,6 +26,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private UserServiceImp userServiceImp;
+
+	@Autowired
+	private FacebookOauth2UserServiceImp facebookOauth2UserServiceImp;
 
 	@Bean
 	public DaoAuthenticationProvider authenticationProvider() {
@@ -45,17 +54,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(final HttpSecurity http) throws Exception {
 		http
 			   .authorizeRequests()
-			   .antMatchers("/home", "/", "/register", "/confirm_registration", "/forgot_password", "/reset_password","/terms").permitAll()// Cho phép tất cả mọi người truy cập vào  địa chỉ này
-			   .antMatchers("/admin/**").hasRole("ADMIN")
+			   .antMatchers("/home", "/", "/register", "/confirm_registration", "/forgot_password", "/reset_password", "/terms", "/oauth2/**")
+			   .permitAll()// Cho phép tất cả mọi người truy cập vào  địa chỉ này
+//			   .antMatchers("/admin/**").hasRole("ADMIN")
+//			   .antMatchers("/users/**").authenticated()
 			   .and()
 			   .authorizeRequests()
-			   .anyRequest().authenticated()
+			   .anyRequest()
+			   .permitAll()
 			   .and()
 			   .formLogin() // allow user authentication with login page
 			   .loginPage("/login")
+			   .usernameParameter("email")
 			   .defaultSuccessUrl("/home")
 			   .permitAll()
-//			   .successForwardUrl("/home")
+			   .and()
+			   .oauth2Login()
+			   .loginPage("/login")
+			   .userInfoEndpoint().userService(facebookOauth2UserServiceImp)
+			   .and()
 			   .and()
 			   .rememberMe().key("jremember")
 			   .and()
@@ -73,6 +90,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configure(WebSecurity web) throws Exception {
 		web
 			   .ignoring()
-			   .antMatchers("/resources/**", "/static/**", "/webfonts/**", "/css/**", "/js/**", "/images/**", "/template/**","/webjars/**");
+			   .antMatchers("/resources/**", "/static/**", "/webfonts/**", "/css/**", "/js/**", "/images/**", "/template/**");
 	}
+
+
 }

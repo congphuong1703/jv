@@ -1,4 +1,3 @@
-<!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -14,7 +13,7 @@
             <div class="login__image">
             </div>
             <div class="login__form">
-                <form class="form-block" th:action="@{/login}" method="post">
+<!--                <form class="form-block" th:action="@{/login}" method="post">-->
                     <h4 class="form-block__title" th:text="#{memberLogin}">Member Login</h4>
                     <div class="alert alert-error" th:if="${param.logout}" th:text="#{logoutSuccess}"></div>
                     <div class="alert alert-error" th:if="${param.error}" th:text="#{loginError}"></div>
@@ -35,14 +34,22 @@
                         <span th:text="#{forgot}">Forgot</span>
                         <a th:href="@{/forgot_password}" class="forgot__link" th:text="#{login.password}"></a>
                     </h4>
+                    <div class="container authenticated" style="display: none">
+                        Logged in as: <span id="user"></span>
+                    </div>
+<!--                    <h4 class="form__register">-->
+<!--                        <span th:text="#{login.create}">Create your </span>-->
+<!--                        <a th:href="@{/register}" class="forgot__link" th:utext="#{createAccount}">Account</a>-->
+<!--                    </h4>-->
                     <h4 class="form__register">
-                        <span th:text="#{login.create}">Create your </span>
-                        <a th:href="@{/register}" class="forgot__link" th:utext="#{createAccount}">Account</a>
+                        <a th:href="@{/oauth2/authorization/facebook}" class="btn btn-lg btn-success"
+                           style="align : center">Continue with Facebook</a>
                     </h4>
-                </form>
+<!--                </form>-->
             </div>
         </div>
     </div>
 </div>
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </html>

@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Component
-public class ForgotPasswordEmailListener implements ApplicationListener<VerificationURLEvent> {
+public class ForgotPasswordEmailListener implements ApplicationListener<ForgotPasswordEvent> {
 
 	@Autowired
 	private VerificationTokenService verificationTokenService;
@@ -29,11 +29,11 @@ public class ForgotPasswordEmailListener implements ApplicationListener<Verifica
 	private RegistrationEmailListener registrationEmailListener;
 
 	@Override
-	public void onApplicationEvent(VerificationURLEvent event) {
+	public void onApplicationEvent(ForgotPasswordEvent event) {
 		this.confirmResetPassword(event);
 	}
 
-	public void confirmResetPassword(VerificationURLEvent event){
+	public void confirmResetPassword(ForgotPasswordEvent event){
 		Users users = event.getUsers();
 		String token = UUID.randomUUID().toString();
 		verificationTokenService.createVerificationToken(users,token);

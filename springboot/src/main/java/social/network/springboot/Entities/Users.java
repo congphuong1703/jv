@@ -1,19 +1,23 @@
 package social.network.springboot.Entities;
 
-import lombok.Data;
+import lombok.*;
 import social.network.springboot.Enums.EnumStatus;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "users")
 public class Users {
 
-	public Users() {
-	}
 
-	public Users(String username, String password, String email,String role) {
+	public Users(String username, String password, String email, String role) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -23,19 +27,19 @@ public class Users {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="id")
+	@Column(name = "id")
 	private Long id;
 
-	@Column(name = "username",nullable = false)
+	@Column(name = "username", nullable = false)
 	private String username;
 
-	@Column(name = "password",nullable = false)
+	@Column(name = "password", nullable = false)
 	private String password;
 
 	@Column(name = "full_name")
 	private String fullName;
 
-	@Column(name ="middle_name")
+	@Column(name = "middle_name")
 	private String middleName;
 
 	@Column(name = "first_name")
@@ -50,31 +54,32 @@ public class Users {
 	@Column(name = "address")
 	private String address;
 
-	@Column(name = "phone_number" )
+	@Column(name = "phone_number")
 	private String phoneNumber;
 
 	@Column(name = "role")
 	private String role;
 
-	@Column(name ="isActive")
-	private EnumStatus status;
+	@OneToMany(mappedBy = "users",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@Column(name = "relationship")
+	private List<Relationship> relationships;
 
-	@Column(name ="isReported")
+	@Column(name = "isReported")
 	private int isReported;
 
 	@Column(name = "isAuth")
 	private Boolean isAuth;
 
-	@Column(name ="createdBy")
+	@Column(name = "createdBy")
 	private String createBy;
 
-	@Column(name ="createdDate")
+	@Column(name = "createdDate")
 	private Timestamp createDate;
 
-	@Column(name ="updatedBy")
+	@Column(name = "updatedBy")
 	private String updateBy;
 
-	@Column(name ="updatedDate")
+	@Column(name = "updatedDate")
 	private Timestamp updateDate;
 
 	@Column(name = "isDelete")

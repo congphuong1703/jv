@@ -1,0 +1,82 @@
+#-------------------Config port
+#server.port=9090
+spring:
+  server:
+    port: 9090
+
+  datasource:
+    platform: postgres
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: 123456
+    driverClassName: org.postgresql.Driver
+
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+      dialect: org.hibernate.dialect.PostgreSQL94Dialect
+
+  jsf:
+    primefaces:
+      FONT_AWESOME: true
+
+  security:
+    oauth2:
+      client:
+        registration:
+          facebook:
+            client-id: 1081804428919463
+            client-secret: 6d554f4c4e437bf4f1cac0100e845c3e
+            accessTokenUri: https://graph.facebook.com/oauth/access_token
+            userAuthorizationUri: https://www.facebook.com/dialog/oauth
+            tokenName: oauth_token
+            authenticationScheme: query
+            clientAuthenticationScheme: form
+            resource:
+             userInfoUri: https://graph.facebook.com/me
+#            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}" # Note that facebook now mandates the use of https redirect URIs, so make sure your app supports https in production
+#            scope:
+#              - email
+#              - public_profile
+#-------------------Upload File
+#spring.servlet.multipart.max-file-size=128KB
+#spring.servlet.multipart.max-request-size=128KB
+#-------------------Postgresql
+#spring.datasource.url=jdbc:postgresql://localhost:5432/postgres
+#spring.datasource.username=postgres
+#spring.datasource.password=123456
+#-------------------JPA
+#spring.jpa.show-sql=true
+#spring.jpa.generate-ddl=true
+#spring.jpa.open-in-view=false
+#spring.jpa.hibernate.ddl-auto=create-drop
+#spring.jpa.database-platform = org.hibernate.dialect.PostgreSQL94Dialect
+#-------------------Custom Error
+#server.error.whitelabel.enabled=false
+#server.error.path=/error
+#--------------Facebook
+#spring.security.oauth2.client.registration.facebook.client-id=1081804428919463
+#spring.security.oauth2.client.registration.facebook.client-secret=6d554f4c4e437bf4f1cac0100e845c3e
+#        google:
+#          clientId: 5014057553-8gm9um6vnli3cle5rgigcdjpdrid14m9.apps.googleusercontent.com
+#          clientSecret: tWZKVLxaD_ARWsriiiUFYoIk
+#          redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+#          scope:
+#            - email
+#            - profile
+#        github:
+#          clientId: d3e47fc2ddd966fa4352
+#          clientSecret: 3bc0f6b8332f93076354c2a5bada2f5a05aea60d
+#          redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+#          scope:
+#            - user:email
+#            - read:user
+#       provider:
+#        facebook:
+#          authorizationUri: https://www.facebook.com/v3.0/dialog/oauth
+#          tokenUri: https://graph.facebook.com/v3.0/oauth/access_token
+#          userInfoUri: https://graph.facebook.com/v3.0/me?fields=id,first_name,middle_name,last_name,name,email,verified,is_verified,picture.width(250).height(250)

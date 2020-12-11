@@ -6,26 +6,39 @@ import lombok.NoArgsConstructor;
 import social.network.springboot.Enums.EnumRelationship;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "relationship")
 public class Relationship {
+
+	public Relationship(Users users,Users userRelated,boolean isActive){
+		this.users = users;
+		this.usersRelated = userRelated;
+		this.isActive = isActive;
+		this.date =  new Date();
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
 	private Long id;
 
-//	@OneToOne
-//	@Column(name = "user_one")
-//	private Users userOne;
-//
-//	@OneToOne
-//	@Column(name = "user_two")
-//	private Users userTwo;
+	@ManyToOne
+	@JoinColumn(name = "users")
+	private Users users;
 
-	@Column(name = "status")
-	private EnumRelationship enumRelationship;
+	@OneToOne
+	@JoinColumn(name = "user_related")
+	private Users usersRelated;
+
+	@Column(name = "datetime")
+	private Date date;
+
+	@Column(name = "is_active")
+	private Boolean isActive;
 }

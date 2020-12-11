@@ -11,7 +11,6 @@ import social.network.springboot.DTO.UserDTO;
 import social.network.springboot.DTO.UserPasswordDTO;
 import social.network.springboot.Entities.Users;
 import social.network.springboot.Entities.VerificationToken;
-import social.network.springboot.Enums.EnumStatus;
 import social.network.springboot.Repositories.UserRepository;
 import social.network.springboot.Services.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,7 +18,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.transaction.Transactional;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 @Service
 public class UserServiceImp implements UserService, UserDetailsService {
@@ -80,7 +78,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
 
 	@Override
 	public Users findByUsername(String username) {
-		return userRepository.findByUsername(username.toLowerCase());
+		return userRepository.findByUsername(username);
 	}
 
 	@Override
