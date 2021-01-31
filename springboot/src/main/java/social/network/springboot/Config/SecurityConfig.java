@@ -1,10 +1,8 @@
 package social.network.springboot.Config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,13 +11,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.header.writers.StaticHeadersWriter;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import social.network.springboot.Oauth.FacebookOauth.Oauth2LoginSuccessHandler;
-import social.network.springboot.ServiceImps.FacebookOauth2UserServiceImp;
+import social.network.springboot.ServiceImps.CustomOauth2UserServiceImp;
 import social.network.springboot.ServiceImps.UserServiceImp;
-import social.network.springboot.Services.FacebookOauth2UserService;
 
 @Configuration
 @EnableWebSecurity
@@ -29,7 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private UserServiceImp userServiceImp;
 
 	@Autowired
-	private FacebookOauth2UserServiceImp facebookOauth2UserServiceImp;
+	private CustomOauth2UserServiceImp customOauth2UserServiceImp;
 
 	@Autowired
 	private Oauth2LoginSuccessHandler oauth2LoginSuccessHandler;
@@ -58,31 +53,32 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(final HttpSecurity http) throws Exception {
 		http
 			   .authorizeRequests()
-			   .antMatchers("/home", "/", "/register", "/confirm_registration", "/forgot_password", "/reset_password", "/terms", "/oauth2/**")
+			   .antMatchers("/post","/register", "/confirm_registration", "/forgot_password", "/reset_password", "/terms", "/oauth2/**", "/logout", "/login")
 			   .permitAll()// Cho phép tất cả mọi người truy cập vào  địa chỉ này
-			   .antMatchers("/admin/**").hasRole("ADMIN")
+			   .antMatchers("/admin/**","/admin", "/user-profile/**").hasAnyAuthority("ADMIN")
 			   .antMatchers("/user/**").authenticated()
-			   .and()
-			   .authorizeRequests()
-			   .anyRequest()
-			   .permitAll()
+			   .anyRequest().authenticated()
 			   .and()
 			   .formLogin() // allow user authentication with login page
 			   .loginPage("/login")
-			   .usernameParameter("email")
+//			   .usernameParameter("email")
+			   .successForwardUrl("/home")
 			   .defaultSuccessUrl("/home")
 			   .permitAll()
 			   .and()
 			   .oauth2Login()
 			   .loginPage("/login")
-			   .userInfoEndpoint().userService(facebookOauth2UserServiceImp)
+			   .userInfoEndpoint().userService(customOauth2UserServiceImp)
 			   .and()
 			   .successHandler(oauth2LoginSuccessHandler)
 			   .and()
 			   .rememberMe().key("jremember")
 			   .and()
 			   .logout() // allow logout
-			   .permitAll()
+			   .logoutUrl("/login")
+			   .invalidateHttpSession(true)
+			   .deleteCookies("jremember")
+//			   .permitAll()
 			   .and()
 			   .exceptionHandling().accessDeniedPage("/access-denied")
 			   .and()

@@ -1,7 +1,9 @@
 package social.network.springboot.ServiceImps;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,8 +16,7 @@ import social.network.springboot.Services.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.transaction.Transactional;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class UserServiceImp implements UserService, UserDetailsService {
@@ -41,21 +42,25 @@ public class UserServiceImp implements UserService, UserDetailsService {
 	public Users registerUser(UserDTO userDto) {
 		Users user = new Users();
 		String hashedPassword = passwordEncoder.encode(userDto.getPassword());
-//		String fullName = userDto.getFullName();
-//		user.setFirstName(fullName.substring(0,fullName.indexOf(" ")));
-//		user.setLastName(fullName.substring(fullName.indexOf(" ") + 1, fullName.length()));
+		System.out.println(hashedPassword);
 		user.setFullName(userDto.getFullName());
 		user.setUsername(userDto.getUserName());
 		user.setPassword(hashedPassword);
 		user.setEmail(userDto.getEmail());
-		user.setRole("USER");
+		user.setRole("ADMIN");
 		userRepository.save(user);
 //		user.setRoles(Arrays.asList(roleDAO.findByRoleName("ROLE_CANDIDATE")));
 		return user;
 	}
 
-	public void registerUserByOauth(String email,String fullname,String username){
-		Users users = new Users(username,email,fullname);
+	public void registerUserByOauth(String username, String email, String fullname) {
+		Users users = new Users(username, email, fullname);
+		users.setActive(true);
+		users.setRole("USER");
+		users.setCreateBy("ADMIN");
+		String hashedPassword = passwordEncoder.encode(username);
+		users.setPassword(hashedPassword);
+		users.setIsAuth(true);
 		userRepository.save(users);
 	}
 
@@ -113,15 +118,15 @@ public class UserServiceImp implements UserService, UserDetailsService {
 		} catch (UsernameNotFoundException e) {
 			e.printStackTrace();
 		}
-//		Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-//		for (Role role : user.getRoles()){
-//			grantedAuthorities.add(new SimpleGrantedAuthority(role.getName()));
-//		}
+		Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+		grantedAuthorities.add(new SimpleGrantedAuthority(users.getRole()));
+
 		UserDetails user = new org.springframework.security.core.userdetails.User(username, users.getPassword(), true,
-			   true, true, true, AuthorityUtils.createAuthorityList(users.getRole()));
+			   true, true, true, grantedAuthorities);
 		System.out.println("ROLE: " + users.getRole());
 		return user;
 	}
+
 
 	@Override
 	public boolean confirmEmail(VerificationToken verificationToken) {

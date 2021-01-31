@@ -3,6 +3,7 @@ package social.network.springboot.Controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -155,5 +156,11 @@ public class UserController {
 		userService.updatePassword(userObj);
 		model.addAttribute("resetSuccess", resetSuccess);
 		return "redirect:/login";
+	}
+
+	@RequestMapping(value ="/user-profile",method = RequestMethod.GET)
+	@PreAuthorize("hasRole('Admin')")
+	public String userProfile(){
+		return "user-profile";
 	}
 }

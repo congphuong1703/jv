@@ -21,8 +21,8 @@ public class WebConfig {
 	@Bean
 	CommandLineRunner init(UserRepository userRepository) {
 		return (args) -> {
-			Users user1 = new Users("user", "$2a$06$3jYRJrg0ghaaypjZ/.g4SethoeA51ph3UD4kZi9oPkeMTpjKU5uo6", "user@gmail.com", "USER");
-			Users user2 = new Users("admin", "$2a$10$o57IgXtq0QxA9p0jqV0NFePqn0JYH4r8DanzjFnT0YH.4nDlrROYq", "congphuong@gmail.com", "ADMIN");
+			Users user1 = new Users("user", "$2a$10$PJgmnQcYPAHtkDX8wzCSYeP8CNAstpVLH0PkHK7Bz9r.ZLz5Or2Wu", "user@gmail.com", "USER");
+			Users user2 = new Users("admin", "$2a$10$PJgmnQcYPAHtkDX8wzCSYeP8CNAstpVLH0PkHK7Bz9r.ZLz5Or2Wu", "congphuong@gmail.com", "ADMIN");
 			userRepository.save(user1);
 			userRepository.save(user2);
 		};

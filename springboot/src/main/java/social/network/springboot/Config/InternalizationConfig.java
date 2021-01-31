@@ -27,8 +27,6 @@ public class InternalizationConfig implements  WebMvcConfigurer {
 		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
 		messageSource.setBasenames("entityMessages",
 			   "messages","validateMessages");
-//		messageSource.setCacheSeconds(0);
-//		messageSource.setUseCodeAsDefaultMessage(true);
 		messageSource.setDefaultEncoding("UTF-8");
 		return messageSource;
 	}

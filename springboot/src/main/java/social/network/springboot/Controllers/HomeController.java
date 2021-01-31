@@ -6,6 +6,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.social.connect.ConnectionRepository;
+import org.springframework.social.facebook.api.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +31,6 @@ public class HomeController {
 
 	@RequestMapping(value = "/login")
 	public String login(Model model) {
-//
 //		//check role
 //		//comment are wrong
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -42,13 +43,18 @@ public class HomeController {
 
 	@RequestMapping(value = {"/home", "/", ""})
 	public String home(Model model, HttpServletRequest request) {
-		Users currentUser = userService.findByUsername(request.getUserPrincipal().getName());
-		List<Users> usersList = userService.getAllUser();
-		int follower = relationshipService.countByUserRelated(currentUser);
 
-		model.addAttribute("listFriendSuggest", usersList);
-		model.addAttribute("follower", follower);
-		model.addAttribute("currentUser", currentUser);
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		if ((authentication instanceof AnonymousAuthenticationToken)) {
+			return "redirect:/login";
+		}
+//		Users currentUser = userService.findByUsername(request.getUserPrincipal().getName());
+//		List<Users> usersList = userService.getAllUser();
+//		int follower = relationshipService.countByUserRelated(currentUser);
+//		model.addAttribute("listFriendSuggest", usersList);
+//		model.addAttribute("follower", follower);
+//		model.addAttribute("currentUser", currentUser);
 		return "home";
 	}
 

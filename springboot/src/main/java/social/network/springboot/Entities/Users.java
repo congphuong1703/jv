@@ -5,6 +5,7 @@ import social.network.springboot.Enums.EnumStatus;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -23,6 +24,7 @@ public class Users {
 		this.password = password;
 		this.email = email;
 		this.role = role;
+		this.setActive(true);
 	}
 
 	public Users(String username, String email,String fullName) {
